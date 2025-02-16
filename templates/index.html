@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8f0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            color:rgb(21, 235, 42);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .input-help {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            color:rgb(56, 241, 9);
+            text-align: center;
+        }
+
+        .soil-info {
+            margin-top: 10px;
+            color: #666;
+            text-align: center;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .language-btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid #4CAF50;
+            background-color: white;
+            color: #4CAF50;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .language-btn:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-selector">
+            <button class="language-btn active" onclick="changeLanguage('en')">English</button>
+            <button class="language-btn" onclick="changeLanguage('hi')">हिंदी</button>
+            <button class="language-btn" onclick="changeLanguage('mr')">मराठी</button>
+        </div>
+
+        <h1 class="lang-en">Crop Recommendation System</h1>
+        <h1 class="lang-hi" style="display: none;">फसल अनुशंसा प्रणाली</h1>
+        <h1 class="lang-mr" style="display: none;">पीक शिफारस प्रणाली</h1>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="soil_type" class="lang-en">Soil Type:</label>
+                <label for="soil_type" class="lang-hi" style="display: none;">मिट्टी का प्रकार:</label>
+                <label for="soil_type" class="lang-mr" style="display: none;">मातीचा प्रकार:</label>
+                <select id="soil_type" name="soil_type" required>
+                    <option value="" disabled selected class="lang-en">Select soil type</option>
+                    <option value="" disabled selected class="lang-hi" style="display: none;">मिट्टी का प्रकार चुनें</option>
+                    <option value="" disabled selected class="lang-mr" style="display: none;">मातीचा प्रकार निवडा</option>
+                    
+                    <option value="1" class="lang-en">Alluvial Soil</option>
+                    <option value="1" class="lang-hi" style="display: none;">जलोढ़ मिट्टी</option>
+                    <option value="1" class="lang-mr" style="display: none;">गाळाची माती</option>
+                    
+                    <option value="2" class="lang-en">Red Soil</option>
+                    <option value="2" class="lang-hi" style="display: none;">लाल मिट्टी</option>
+                    <option value="2" class="lang-mr" style="display: none;">तांबडी माती</option>
+                    
+                    <option value="3" class="lang-en">Black Soil</option>
+                    <option value="3" class="lang-hi" style="display: none;">काली मिट्टी</option>
+                    <option value="3" class="lang-mr" style="display: none;">काळी माती</option>
+                    
+                    <option value="4" class="lang-en">Mountain Soil</option>
+                    <option value="4" class="lang-hi" style="display: none;">पर्वतीय मिट्टी</option>
+                    <option value="4" class="lang-mr" style="display: none;">डोंगराळ माती</option>
+                    
+                    <option value="5" class="lang-en">Laterite Soil</option>
+                    <option value="5" class="lang-hi" style="display: none;">लैटेराइट मिट्टी</option>
+                    <option value="5" class="lang-mr" style="display: none;">लॅटेराईट माती</option>
+                    
+                    <option value="6" class="lang-en">Desert Soil</option>
+                    <option value="6" class="lang-hi" style="display: none;">रेगिस्तानी मिट्टी</option>
+                    <option value="6" class="lang-mr" style="display: none;">वाळवंटी माती</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="temperature" class="lang-en">Temperature (°C):</label>
+                <label for="temperature" class="lang-hi" style="display: none;">तापमान (°C):</label>
+                <label for="temperature" class="lang-mr" style="display: none;">तापमान (°C):</label>
+                <input type="number" id="temperature" name="temperature" min="0" max="50" step="0.1" required>
+                <div class="input-help lang-en">Enter temperature between 0-50°C</div>
+                <div class="input-help lang-hi" style="display: none;">0-50°C के बीच तापमान दर्ज करें</div>
+                <div class="input-help lang-mr" style="display: none;">0-50°C दरम्यान तापमान टाका</div>
+            </div>
+
+            <div class="form-group">
+                <label for="humidity" class="lang-en">Humidity (%):</label>
+                <label for="humidity" class="lang-hi" style="display: none;">आर्द्रता (%):</label>
+                <label for="humidity" class="lang-mr" style="display: none;">आर्द्रता (%):</label>
+                <input type="number" id="humidity" name="humidity" min="0" max="100" step="1" required>
+                <div class="input-help lang-en">Enter humidity between 0-100%</div>
+                <div class="input-help lang-hi" style="display: none;">0-100% के बीच आर्द्रता दर्ज करें</div>
+                <div class="input-help lang-mr" style="display: none;">0-100% दरम्यान आर्द्रता टाका</div>
+            </div>
+
+            <div class="form-group">
+                <label for="rainfall" class="lang-en">Rainfall (mm):</label>
+                <label for="rainfall" class="lang-hi" style="display: none;">वर्षा (मिमी):</label>
+                <label for="rainfall" class="lang-mr" style="display: none;">पाऊस (मिमी):</label>
+                <input type="number" id="rainfall" name="rainfall" min="0" max="1000" step="1" required>
+                <div class="input-help lang-en">Enter annual rainfall in millimeters (0-1000mm)</div>
+                <div class="input-help lang-hi" style="display: none;">वार्षिक वर्षा मिलीमीटर में दर्ज करें (0-1000 मिमी)</div>
+                <div class="input-help lang-mr" style="display: none;">वार्षिक पाऊस मिलीमीटरमध्ये टाका (0-1000 मिमी)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="ph" class="lang-en">pH Level:</label>
+                <label for="ph" class="lang-hi" style="display: none;">पीएच स्तर:</label>
+                <label for="ph" class="lang-mr" style="display: none;">पीएच पातळी:</label>
+                <input type="number" id="ph" name="ph" min="0" max="14" step="0.1" required>
+                <div class="input-help lang-en">Enter pH value between 0-14</div>
+                <div class="input-help lang-hi" style="display: none;">0-14 के बीच पीएच मान दर्ज करें</div>
+                <div class="input-help lang-mr" style="display: none;">0-14 दरम्यान पीएच मूल्य टाका</div>
+            </div>
+
+            <button type="submit" class="lang-en">Get Recommendation</button>
+            <button type="submit" class="lang-hi" style="display: none;">अनुशंसा प्राप्त करें</button>
+            <button type="submit" class="lang-mr" style="display: none;">शिफारस मिळवा</button>
+        </form>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if prediction %}
+        <div class="result">
+            <h2 class="lang-en">Soil Analysis Results</h2>
+            <h2 class="lang-hi" style="display: none;">मिट्टी विश्लेषण परिणाम</h2>
+            <h2 class="lang-mr" style="display: none;">माती विश्लेषण निकाल</h2>
+            <div class="soil-info">
+                <h3 class="lang-en">{{ prediction.soil_name }}</h3>
+                <h3 class="lang-hi" style="display: none;">{{ translations.hi.soils[prediction.soil_name] }}</h3>
+                <h3 class="lang-mr" style="display: none;">{{ translations.mr.soils[prediction.soil_name] }}</h3>
+                
+                <p class="lang-en"><strong>Best Recommended Crop:</strong> {{ prediction.recommended_crop }}</p>
+                <p class="lang-hi" style="display: none;"><strong>सर्वोत्तम अनुशंसित फसल:</strong> {{ translations.hi.crops[prediction.recommended_crop] }}</p>
+                <p class="lang-mr" style="display: none;"><strong>सर्वोत्तम शिफारस केलेले पीक:</strong> {{ translations.mr.crops[prediction.recommended_crop] }}</p>
+                
+                <p class="lang-en"><strong>All Suitable Crops:</strong></p>
+                <p class="lang-hi" style="display: none;"><strong>सभी उपयुक्त फसलें:</strong></p>
+                <p class="lang-mr" style="display: none;"><strong>सर्व योग्य पिके:</strong></p>
+                <ul class="lang-en">
+                    {% for crop in prediction.suitable_crops %}
+                    <li>{{ crop }}</li>
+                    {% endfor %}
+                </ul>
+                <ul class="lang-hi" style="display: none;">
+                    {% for crop in prediction.suitable_crops %}
+                    <li>{{ translations.hi.crops[crop] }}</li>
+                    {% endfor %}
+                </ul>
+                <ul class="lang-mr" style="display: none;">
+                    {% for crop in prediction.suitable_crops %}
+                    <li>{{ translations.mr.crops[crop] }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+    function changeLanguage(lang) {
+        // Hide all language elements
+        document.querySelectorAll('.lang-en, .lang-hi, .lang-mr').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // Show selected language elements
+        document.querySelectorAll('.lang-' + lang).forEach(el => {
+            el.style.display = el.tagName === 'OPTION' ? 'block' : 'block';
+        });
+        
+        // Update active button
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`.language-btn[onclick="changeLanguage('${lang}')"]`).classList.add('active');
+        
+        // Update select options visibility
+        const select = document.getElementById('soil_type');
+        Array.from(select.options).forEach(option => {
+            if (option.classList.contains('lang-' + lang)) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    }
+    </script>
+</body>
+</html>
